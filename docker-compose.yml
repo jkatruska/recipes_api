@@ -9,7 +9,7 @@ services:
     volumes:
       - ./app/public:/app/public:rw,cached
     depends_on:
-      - api
+      - app
 
   app:
     build:
@@ -17,20 +17,19 @@ services:
     volumes:
       - ./app:/app:cached
       - ./app/vendor:/app/vendor:cached
-    ports:
-      - '9000:9000'
     depends_on:
       - database
 
   database:
-    image: postgres:14.2-alpine
+    image: mariadb:10.7.3-focal
     ports:
-      - "5432:5432"
+      - "3306:3306"
     environment:
-      POSTGRES_DB: app
-      POSTGRES_PASSWORD: root
-      POSTGRES_USER: root
+      MARIADB_USER: recipe
+      MARIADB_PASSWORD: recipe
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: app
     volumes:
-      - db-data:/var/lib/postgresql/data:rw
+      - db-data:/var/lib/mysql:rw
 volumes:
   db-data:
