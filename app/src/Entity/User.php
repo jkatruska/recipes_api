@@ -9,19 +9,25 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
+#[ORM\Table(name: 'users')]
+#[ORM\Index(fields: ['username', 'password'], name: 'user_login')]
+#[ORM\UniqueConstraint(name: 'username', fields: ['username'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
-    #[ORM\Column(name: 'id', type: 'int')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private int $id;
 
     #[ORM\Column(name: 'username', type: 'string', length: 50)]
     private string $username;
 
-    #[ORM\Column(name: 'password', type: 'string')]
+    #[ORM\Column(name: 'password', type: 'string', length: 250)]
     private string $password;
+
+    /** @var string[] */
+    #[ORM\Column(name: 'roles', type: 'json')]
+    private array $roles = [];
 
     /**
      * @return int
@@ -68,13 +74,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        return array_merge($this->roles, ['ROLE_USER']);
     }
 
     /**
-     * @inheritDoc
+     * @param string $role
      */
-    public function eraseCredentials()
+    public function addRole(string $role): void
+    {
+        $this->roles[] = $role;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function eraseCredentials(): void
     {
     }
 
