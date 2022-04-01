@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,6 +30,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /** @var string[] */
     #[ORM\Column(name: 'roles', type: 'json')]
     private array $roles = [];
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserRecipe::class)]
+    private Collection $userRecipe;
+
+    public function __construct()
+    {
+        $this->userRecipe = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -97,6 +107,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return $this->username;
+        return (string) $this->id;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getUserRecipe(): Collection
+    {
+        return $this->userRecipe;
+    }
+
+    /**
+     * @param Collection $userRecipe
+     */
+    public function setUserRecipe(Collection $userRecipe): void
+    {
+        $this->userRecipe = $userRecipe;
     }
 }
