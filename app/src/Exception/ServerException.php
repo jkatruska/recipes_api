@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exception;
 
 use Exception;
@@ -15,7 +17,7 @@ class ServerException extends Exception implements DomainExceptionInterface
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct($message = "Internal server error", $code = 0, Throwable $previous = null)
+    public function __construct($message = 'Internal server error', $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;

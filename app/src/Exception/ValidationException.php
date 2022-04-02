@@ -31,7 +31,7 @@ class ValidationException extends Exception implements PayloadExceptionInterface
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     public function getData(): array
     {
@@ -50,6 +50,6 @@ class ValidationException extends Exception implements PayloadExceptionInterface
      */
     private function formatPropertyPath(string $propertyPath): string
     {
-        return str_replace(['][', '[' , ']'], ['.', '', '',], $propertyPath);
+        return str_replace(['][', '[', ']'], ['.', '', ''], $propertyPath);
     }
 }

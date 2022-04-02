@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class RecipeController extends AbstractController
+final class RecipeController extends AbstractController
 {
     public function __construct(
         private RecipeService $recipeService
@@ -41,9 +41,9 @@ class RecipeController extends AbstractController
     /**
      * @param UserInterface $user
      * @param int $id
-     * @return JsonResponse
      * @throws PermissionException
      * @throws NonUniqueResultException
+     * @return JsonResponse
      */
     #[Route('/recipe/{id}', name: 'recipe_getById', methods: ['GET'])]
     public function getById(UserInterface $user, int $id): JsonResponse
@@ -59,8 +59,8 @@ class RecipeController extends AbstractController
     /**
      * @param UserInterface $user
      * @param Request $request
-     * @return JsonResponse
      * @throws ValidationException|ServerException
+     * @return JsonResponse
      */
     #[Route('/recipe', name: 'recipe_addRecipe', methods: ['POST'])]
     public function addRecipe(UserInterface $user, Request $request): JsonResponse

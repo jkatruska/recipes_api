@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'recipe_ingredients')]
-class RecipeIngredient
+final class RecipeIngredient
 {
     #[ORM\Column(name: 'amount', type: 'float', precision: 5, scale: 2, options: ['unsigned' => true])]
     private float $amount;

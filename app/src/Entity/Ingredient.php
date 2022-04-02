@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'ingredients')]
 #[ORM\Index(fields: ['unit'], name: 'unit')]
-class Ingredient
+final class Ingredient
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -23,6 +23,7 @@ class Ingredient
     #[ORM\Column(name: 'unit', type: 'string', length: 8)]
     private string $unit;
 
+    /** @var Collection<int, RecipeIngredient> */
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: RecipeIngredient::class)]
     private Collection $recipeIngredient;
 
@@ -75,7 +76,7 @@ class Ingredient
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, RecipeIngredient>
      */
     public function getRecipeIngredient(): Collection
     {
@@ -83,7 +84,7 @@ class Ingredient
     }
 
     /**
-     * @param Collection $recipeIngredient
+     * @param Collection<int, RecipeIngredient> $recipeIngredient
      */
     public function setRecipeIngredient(Collection $recipeIngredient): void
     {

@@ -73,7 +73,7 @@ class RecipeServiceTest extends TestCase
     /**
      * @param int $id
      * @param string $name
-     * @param array $courses
+     * @param Course[] $courses
      * @return Recipe
      */
     private function createRecipe(int $id, string $name, array $courses): Recipe

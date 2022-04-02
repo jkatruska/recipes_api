@@ -8,10 +8,9 @@ use App\Entity\Course;
 use App\Entity\Recipe;
 use App\Entity\RecipeIngredient;
 use App\Entity\RecipeStep;
-use App\Entity\UserRecipe;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class RecipeNormalizer implements NormalizerInterface
+final class RecipeNormalizer implements NormalizerInterface
 {
     public const CONTEXT_LIST = 'list';
     public const CONTEXT_DETAIL = 'detail';
@@ -19,8 +18,8 @@ class RecipeNormalizer implements NormalizerInterface
     /**
      * @param Recipe $object
      * @param string|null $format
-     * @param array $context
-     * @return array
+     * @param string[] $context
+     * @return array<string, mixed>
      */
     public function normalize(mixed $object, string $format = null, array $context = []): array
     {
@@ -29,8 +28,8 @@ class RecipeNormalizer implements NormalizerInterface
         }
 
         return match ($context['render']) {
-            self::CONTEXT_LIST => $this->formatDataForList($object),
-            self::CONTEXT_DETAIL => $this->formatDataForDetail($object)
+            self::CONTEXT_DETAIL => $this->formatDataForDetail($object),
+            default => $this->formatDataForList($object)
         };
     }
 
@@ -46,7 +45,7 @@ class RecipeNormalizer implements NormalizerInterface
 
     /**
      * @param Recipe $recipe
-     * @return array
+     * @return array<string, mixed>
      */
     private function formatDataForList(Recipe $recipe): array
     {
@@ -66,7 +65,7 @@ class RecipeNormalizer implements NormalizerInterface
 
     /**
      * @param Recipe $recipe
-     * @return array
+     * @return array<string, mixed>
      */
     private function formatDataForDetail(Recipe $recipe): array
     {
@@ -76,7 +75,7 @@ class RecipeNormalizer implements NormalizerInterface
         foreach ($recipe->getCourses() as $course) {
             $courses[] = [
                 'id' => $course->getId(),
-                'name' => $course->getName()
+                'name' => $course->getName(),
             ];
         }
 
@@ -86,25 +85,25 @@ class RecipeNormalizer implements NormalizerInterface
                 'id' => $recipeIngredient->getIngredient()->getId(),
                 'name' => $recipeIngredient->getIngredient()->getName(),
                 'amount' => $recipeIngredient->getAmount(),
-                'unit' => $recipeIngredient->getIngredient()->getUnit()
+                'unit' => $recipeIngredient->getIngredient()->getUnit(),
             ];
         }
 
-         /** @var RecipeStep $step */
+        /** @var RecipeStep $step */
         foreach ($recipe->getSteps() as $step) {
             $steps[] = [
                 'id' => $step->getId(),
                 'number' => $step->getStep(),
-                'text' => $step->getText()
+                'text' => $step->getText(),
             ];
         }
 
         return [
             'name' => $recipe->getName(),
-            'private' => !empty($recipe->getUserRecipe()->filter(fn(UserRecipe $userRecipe) => $userRecipe->isPrivate() === false)),
+            'private' => !empty($recipe->getUserRecipe()->first()) && $recipe->getUserRecipe()->first()->isPrivate(),
             'courses' => $courses,
             'ingredients' => $ingredients,
-            'steps' => $steps
+            'steps' => $steps,
         ];
     }
 }

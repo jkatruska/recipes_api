@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[ORM\Table(name: 'recipes')]
-class Recipe
+final class Recipe
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -25,18 +25,22 @@ class Recipe
     #[ORM\Column(name: 'date_add', type: 'datetime')]
     private DateTime $dateAdd;
 
+    /** @var Collection<int, Course> */
     #[ORM\ManyToMany(targetEntity: Course::class)]
     #[ORM\JoinTable(name: 'recipe_courses')]
     #[ORM\JoinColumn(name: 'recipe_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'course_id', referencedColumnName: 'id')]
     private Collection $courses;
 
+    /** @var Collection<int, UserRecipe> */
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: UserRecipe::class)]
     private Collection $userRecipe;
 
+    /** @var Collection<int, RecipeIngredient> */
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: RecipeIngredient::class)]
     private Collection $recipeIngredients;
 
+    /** @var Collection<int, RecipeStep> */
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: RecipeStep::class)]
     private Collection $steps;
 
@@ -82,7 +86,7 @@ class Recipe
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, Course>
      */
     public function getCourses(): Collection
     {
@@ -108,7 +112,7 @@ class Recipe
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, UserRecipe>
      */
     public function getUserRecipe(): Collection
     {
@@ -122,9 +126,9 @@ class Recipe
     {
         $this->userRecipe[] = $userRecipe;
     }
-    
+
     /**
-     * @param Collection $userRecipe
+     * @param Collection<int, UserRecipe> $userRecipe
      */
     public function setUserRecipe(Collection $userRecipe): void
     {
@@ -132,7 +136,7 @@ class Recipe
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, RecipeIngredient>
      */
     public function getRecipeIngredients(): Collection
     {
@@ -140,7 +144,7 @@ class Recipe
     }
 
     /**
-     * @param Collection $recipeIngredients
+     * @param Collection<int, RecipeIngredient> $recipeIngredients
      */
     public function setRecipeIngredients(Collection $recipeIngredients): void
     {
@@ -156,7 +160,7 @@ class Recipe
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, RecipeStep>
      */
     public function getSteps(): Collection
     {

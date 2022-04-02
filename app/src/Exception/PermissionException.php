@@ -17,7 +17,7 @@ class PermissionException extends Exception implements DomainExceptionInterface
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct($message = "Insufficient permission", $code = 0, Throwable $previous = null)
+    public function __construct($message = 'Insufficient permission', $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->statusCode = Response::HTTP_FORBIDDEN;

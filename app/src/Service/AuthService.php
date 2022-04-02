@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AuthService
+final class AuthService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

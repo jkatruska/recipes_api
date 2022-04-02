@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints\Optional;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class RecipeService
+final class RecipeService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -52,12 +52,12 @@ class RecipeService
 
     /**
      * @param UserInterface $user
-     * @param array $data
+     * @param array<string, mixed> $data
      * @throws ValidationException|ServerException
      */
-    public function addRecipe(UserInterface $user, array $data)
+    public function addRecipe(UserInterface $user, array $data): void
     {
-        $this->validateAddingRecipe($data, $user);
+        $this->validateRecipe($data, $user);
 
         $recipe = new Recipe();
         $recipe->setName($data['name']);
@@ -83,9 +83,9 @@ class RecipeService
     /**
      * @param UserInterface $user
      * @param int $id
-     * @return Recipe
      * @throws PermissionException|NoResultException
      * @throws NonUniqueResultException
+     * @return Recipe
      */
     public function getRecipe(UserInterface $user, int $id): Recipe
     {
@@ -100,8 +100,8 @@ class RecipeService
     /**
      * @param UserInterface $user
      * @param int $id
-     * @return bool
      * @throws NoResultException
+     * @return bool
      */
     private function isAuthorized(UserInterface $user, int $id): bool
     {
@@ -118,11 +118,11 @@ class RecipeService
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      * @param UserInterface $user
      * @throws ValidationException
      */
-    private function validateAddingRecipe(array $data, UserInterface $user)
+    private function validateRecipe(array $data, UserInterface $user): void
     {
         $courseIds = $this->getValidCourseIds();
         $ingredientIds = $this->getValidIngredientIds();
@@ -222,7 +222,7 @@ class RecipeService
      * @param int[] $courseIds
      * @throws ServerException
      */
-    private function addCourses(Recipe $recipe, array $courseIds)
+    private function addCourses(Recipe $recipe, array $courseIds): void
     {
         try {
             foreach ($courseIds as $courseId) {
@@ -230,18 +230,17 @@ class RecipeService
                 $recipe->addCourse($course);
             }
         } catch (\Doctrine\ORM\ORMException|ORMException) {
-            //TODO: logger
+            // TODO: logger
             throw new ServerException();
         }
     }
 
-
     /**
      * @param Recipe $recipe
-     * @param array $ingredients
+     * @param array<int, float|int> $ingredients
      * @throws ServerException
      */
-    private function addIngredients(Recipe $recipe, array $ingredients)
+    private function addIngredients(Recipe $recipe, array $ingredients): void
     {
         try {
             foreach ($ingredients as $recipeIngredient) {
@@ -255,16 +254,16 @@ class RecipeService
                 $recipe->addRecipeIngredient($recipeIngredientEntity);
             }
         } catch (\Doctrine\ORM\ORMException|ORMException) {
-            //TODO: logger
+            // TODO: logger
             throw new ServerException();
         }
     }
 
     /**
      * @param Recipe $recipe
-     * @param array $steps
+     * @param array<int, string|int> $steps
      */
-    private function addSteps(Recipe $recipe, array $steps)
+    private function addSteps(Recipe $recipe, array $steps): void
     {
         foreach ($steps as $step) {
             $recipeStep = new RecipeStep();

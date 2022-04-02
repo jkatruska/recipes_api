@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ExceptionSubscriber implements EventSubscriberInterface
+final class ExceptionSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private SerializerInterface $serializer
@@ -19,7 +19,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @return array
+     * @return array<string, array>
      */
     public static function getSubscribedEvents(): array
     {
@@ -29,7 +29,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * @param ExceptionEvent $event
      */
-    public function onKernelException(ExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
         if ($exception instanceof DomainExceptionInterface) {

@@ -8,13 +8,13 @@ use App\Exception\DomainExceptionInterface;
 use App\Exception\PayloadExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class DomainExceptionNormalizer implements NormalizerInterface
+final class DomainExceptionNormalizer implements NormalizerInterface
 {
     /**
      * @param DomainExceptionInterface $object
      * @param string|null $format
-     * @param array $context
-     * @return array
+     * @param string[] $context
+     * @return array<string, mixed>
      */
     public function normalize(mixed $object, string $format = null, array $context = []): array
     {

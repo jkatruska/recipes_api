@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: 'users')]
 #[ORM\Index(fields: ['username', 'password'], name: 'user_login')]
 #[ORM\UniqueConstraint(name: 'username', fields: ['username'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+final class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
@@ -31,12 +31,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'roles', type: 'json')]
     private array $roles = [];
 
+    /** @var Collection<int, UserRecipe> */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserRecipe::class)]
     private Collection $userRecipe;
 
     public function __construct()
     {
         $this->userRecipe = new ArrayCollection();
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -111,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, UserRecipe>
      */
     public function getUserRecipe(): Collection
     {
@@ -119,7 +128,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param Collection $userRecipe
+     * @param Collection<int, UserRecipe> $userRecipe
      */
     public function setUserRecipe(Collection $userRecipe): void
     {

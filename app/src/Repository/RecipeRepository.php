@@ -10,7 +10,10 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class RecipeRepository extends EntityRepository
+/**
+ * @extends EntityRepository<Recipe>
+ */
+final class RecipeRepository extends EntityRepository
 {
     /**
      * @param UserInterface $user
@@ -34,29 +37,25 @@ class RecipeRepository extends EntityRepository
 
     /**
      * @param int $id
-     * @return Recipe|null
-     * @throws NoResultException
+     * @throws NoResultException|NonUniqueResultException
+     * @return Recipe
      */
-    public function getOwnership(int $id): ?Recipe
+    public function getOwnership(int $id): Recipe
     {
-        try {
-            return $this->createQueryBuilder('r')
-                ->select('r', 'ur')
-                ->join('r.userRecipe', 'ur')
-                ->where('r.id = :id')
-                ->setParameter('id', $id)
-                ->getQuery()
-                ->getSingleResult();
-        } catch (NonUniqueResultException) {
-            return null;
-        }
+        return $this->createQueryBuilder('r')
+            ->select('r', 'ur')
+            ->join('r.userRecipe', 'ur')
+            ->where('r.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleResult();
     }
 
     /**
      * @param int $id
-     * @return Recipe
      * @throws NoResultException
      * @throws NonUniqueResultException
+     * @return Recipe
      */
     public function getDetail(int $id): Recipe
     {
