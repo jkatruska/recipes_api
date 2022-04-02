@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
 #[ORM\Table(name: 'recipes')]
-final class Recipe
+class Recipe
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: 'integer')]

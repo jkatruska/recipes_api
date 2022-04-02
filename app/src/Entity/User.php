@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: 'users')]
 #[ORM\Index(fields: ['username', 'password'], name: 'user_login')]
 #[ORM\UniqueConstraint(name: 'username', fields: ['username'])]
-final class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]

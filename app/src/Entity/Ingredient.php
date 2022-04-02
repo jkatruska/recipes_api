@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'ingredients')]
 #[ORM\Index(fields: ['unit'], name: 'unit')]
-final class Ingredient
+class Ingredient
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: 'integer')]

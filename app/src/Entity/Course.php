@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'courses')]
-final class Course
+class Course
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: 'integer')]

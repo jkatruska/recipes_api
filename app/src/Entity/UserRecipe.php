@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'user_recipes')]
 #[ORM\Index(fields: ['private'], name: 'private')]
-final class UserRecipe
+class UserRecipe
 {
     #[ORM\Column(name: 'private', type: 'boolean')]
     private bool $private;
