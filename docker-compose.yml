@@ -19,6 +19,7 @@ services:
       - ./app/vendor:/app/vendor:cached
     depends_on:
       - database
+      - storage
 
   database:
     image: mariadb:10.7.3-focal
@@ -31,5 +32,14 @@ services:
       MARIADB_DATABASE: app
     volumes:
       - db-data:/var/lib/mysql:rw
+  storage:
+    image: minio/minio
+    command: server --console-address ":9001" /var/storage-data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - storage-data:/var/storage-data
 volumes:
   db-data:
+  storage-data:

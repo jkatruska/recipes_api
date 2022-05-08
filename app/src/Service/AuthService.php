@@ -53,7 +53,7 @@ class AuthService
         );
         $errors = $this->validator->validate($data, $constraints);
         if (count($errors)) {
-            throw new ValidationException('Invalid data provided');
+            throw new ValidationException();
         }
     }
 }

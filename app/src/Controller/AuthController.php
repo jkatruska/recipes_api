@@ -20,7 +20,7 @@ class AuthController extends AbstractController
     #[Route('/login', name: 'auth_login', methods: ['POST'])]
     public function login(): JsonResponse
     {
-        return $this->json(['test']);
+        return $this->json([]);
     }
 
     /**
