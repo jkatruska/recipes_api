@@ -1,0 +1,6 @@
+parameters:
+  storage:
+    endpoint: '%env(string:STORAGE_ENDPOINT)%'
+    secret: '%env(string:STORAGE_SECRET)%'
+    user: api_user
+    bucket: photos
