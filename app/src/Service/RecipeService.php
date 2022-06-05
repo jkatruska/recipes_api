@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Course;
 use App\Entity\Ingredient;
+use App\Entity\Photo;
 use App\Entity\Recipe;
 use App\Entity\RecipeIngredient;
 use App\Entity\RecipeStep;
@@ -126,7 +127,7 @@ final class RecipeService
     {
         $courseIds = $this->getValidCourseIds();
         $ingredientIds = $this->getValidIngredientIds();
-        $userPhotoIds = $this->getValidPhotoIds($user);
+        $userPhotoKeys = $this->getValidPhotoKeys($user);
         $constraints = new Collection(
             fields: [
                 'name' => [
@@ -135,7 +136,7 @@ final class RecipeService
                 ],
                 'courseIds' => [
                     new NotBlank(),
-                    new Choice(options: $courseIds, multiple: true),
+                    new Choice(choices: $courseIds, multiple: true),
                 ],
                 'private' => [
                     new NotNull(),
@@ -143,7 +144,7 @@ final class RecipeService
                 ],
                 'photoId' => [
                     new NotBlank(),
-                    new Choice(options: $userPhotoIds),
+                    new Choice(choices: $userPhotoKeys),
                 ],
                 'ingredients' => [
                     new All([
@@ -151,7 +152,7 @@ final class RecipeService
                             fields: [
                                 'id' => [
                                     new NotBlank(),
-                                    new Choice(options: $ingredientIds),
+                                    new Choice(choices: $ingredientIds),
                                 ],
                                 'amount' => [
                                     new NotBlank(),
@@ -204,17 +205,22 @@ final class RecipeService
      */
     private function getValidIngredientIds(): array
     {
-        return [1, 2, 3];
-        // TODO: create ingredients table
+        $ingredientsRepo = $this->entityManager->getRepository(Ingredient::class);
+        /** @var Ingredient[] $ingredients */
+        $ingredients = $ingredientsRepo->findAll();
+        return array_map(fn ($ingredient) => $ingredient->getId(), $ingredients);
     }
 
     /**
      * @return int[]
      */
-    private function getValidPhotoIds(UserInterface $user): array
+    private function getValidPhotoKeys(UserInterface $user): array
     {
-        return [1, 2, 3, 78];
-        // TODO: create photos table
+        assert($user instanceof User);
+        $photosRepo = $this->entityManager->getRepository(Photo::class);
+        /** @var Photo[] $photos */
+        $photos = $photosRepo->findBy(['user' => $user]);
+        return array_map(fn ($photo) => $photo->getKey(), $photos);
     }
 
     /**
@@ -237,7 +243,7 @@ final class RecipeService
 
     /**
      * @param Recipe $recipe
-     * @param array<int, float|int> $ingredients
+     * @param array<int, array> $ingredients
      * @throws ServerException
      */
     private function addIngredients(Recipe $recipe, array $ingredients): void
