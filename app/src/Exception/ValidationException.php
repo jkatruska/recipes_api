@@ -7,12 +7,18 @@ namespace App\Exception;
 use Exception;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Throwable;
 
 class ValidationException extends Exception implements PayloadExceptionInterface
 {
     use StatusCodeTrait;
 
     private ConstraintViolationListInterface $constraintViolationList;
+
+    public function __construct(string $message = 'Invalid data provided', int $code = 0, ?Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 
     /**
      * @param ConstraintViolationListInterface $constraintViolationList

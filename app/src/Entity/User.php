@@ -31,6 +31,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'roles', type: 'json')]
     private array $roles = [];
 
+    /** @var ArrayCollection<int, Photo>|Collection<int, Photo> */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Photo::class)]
+    private Collection|ArrayCollection $photos;
+
     /** @var Collection<int, UserRecipe> */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserRecipe::class)]
     private Collection $userRecipe;
@@ -38,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->userRecipe = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     /**
@@ -56,64 +61,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @param string $username
-     */
     public function setUsername(string $username): void
     {
         $this->username = $username;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @param string $password
-     */
     public function setPassword(string $password): void
     {
         $this->password = $password;
     }
 
-    /**
-     * @return string[]
-     */
     public function getRoles(): array
     {
         return array_merge($this->roles, ['ROLE_USER']);
     }
 
-    /**
-     * @param string $role
-     */
     public function addRole(string $role): void
     {
         $this->roles[] = $role;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function eraseCredentials(): void
     {
     }
 
-    /**
-     * @return string
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->id;
@@ -133,5 +114,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUserRecipe(Collection $userRecipe): void
     {
         $this->userRecipe = $userRecipe;
+    }
+
+    public function addPhoto(Photo $photo): void
+    {
+        $photo->setUser($this);
+        $this->photos[] = $photo;
+    }
+
+    /**
+     * @return ArrayCollection<int, Photo>|Collection<int, Photo>
+     */
+    public function getPhotos(): ArrayCollection|Collection
+    {
+        return $this->photos;
     }
 }
