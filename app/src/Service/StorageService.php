@@ -41,7 +41,7 @@ class StorageService
         if ($user instanceof User) {
             $photo = new Photo();
             $photo->setKey($file->getKey());
-            $user->addPhoto($photo);
+            $photo->setUser($user);
 
             $this->entityManager->persist($photo);
             $this->entityManager->flush();
