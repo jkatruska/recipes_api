@@ -6,7 +6,7 @@ namespace App\Request;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class RequestParserFactory
+final class RequestParserFactory
 {
     public static function getParser(Request $request): ?RequestParserInterface
     {

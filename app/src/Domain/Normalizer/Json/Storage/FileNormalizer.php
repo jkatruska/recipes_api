@@ -34,14 +34,14 @@ class FileNormalizer implements NormalizerInterface
     {
         return [
             'key' => $file->getKey(),
-            'url' => $file->getUrl()
+            'url' => $file->getUrl(),
         ];
     }
 
     private function formatUploadData(File $file): array
     {
         return [
-            'key' => $file->getKey()
+            'key' => $file->getKey(),
         ];
     }
 }

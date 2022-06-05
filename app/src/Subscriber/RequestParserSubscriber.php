@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class RequestParserSubscriber implements EventSubscriberInterface
+final class RequestParserSubscriber implements EventSubscriberInterface
 {
     /**
      * @return string[][]

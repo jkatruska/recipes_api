@@ -49,8 +49,7 @@ class MinioStorage implements StorageInterface
 
     public function save(array $file): File
     {
-        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $key = time() . '_' . urlencode(substr($file['name'], 0, 16)) . '.' . $ext;
+        $key = time() . '_' . urlencode(substr($file['name'], 0, 16));
         $this->client->putObject([
             'Bucket' => $this->config->getBucket(),
             'ContentType' => $file['type'],

@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AuthService
+final class AuthService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -53,7 +53,9 @@ class AuthService
         );
         $errors = $this->validator->validate($data, $constraints);
         if (count($errors)) {
-            throw new ValidationException();
+            $e = new ValidationException('Invalid data provided');
+            $e->setConstraintViolationList($errors);
+            throw $e;
         }
     }
 }

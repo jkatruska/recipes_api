@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class StorageService
+final class StorageService
 {
     public function __construct(
         private StorageInterface $storage,

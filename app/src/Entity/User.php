@@ -35,11 +35,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Photo::class)]
     private Collection|ArrayCollection $photos;
 
+    /** @var Collection<int, UserRecipe> */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserRecipe::class)]
+    private Collection $userRecipe;
+
     public function __construct()
     {
+        $this->userRecipe = new ArrayCollection();
         $this->photos = new ArrayCollection();
     }
 
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
@@ -81,7 +97,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->username;
+        return (string) $this->id;
+    }
+
+    /**
+     * @return Collection<int, UserRecipe>
+     */
+    public function getUserRecipe(): Collection
+    {
+        return $this->userRecipe;
+    }
+
+    /**
+     * @param Collection<int, UserRecipe> $userRecipe
+     */
+    public function setUserRecipe(Collection $userRecipe): void
+    {
+        $this->userRecipe = $userRecipe;
     }
 
     public function addPhoto(Photo $photo): void

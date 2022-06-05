@@ -9,10 +9,11 @@ use App\Service\AuthService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/auth')]
-class AuthController extends AbstractController
+final class AuthController extends AbstractController
 {
     /**
      * @return JsonResponse
@@ -20,7 +21,7 @@ class AuthController extends AbstractController
     #[Route('/login', name: 'auth_login', methods: ['POST'])]
     public function login(): JsonResponse
     {
-        return $this->json([]);
+        return $this->json(null);
     }
 
     /**
@@ -33,7 +34,7 @@ class AuthController extends AbstractController
     public function register(Request $request, AuthService $authService): JsonResponse
     {
         $authService->register($request->request->all());
-        return $this->json(['ok']);
+        return $this->json(null, Response::HTTP_CREATED);
     }
 
     /**

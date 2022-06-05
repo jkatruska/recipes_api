@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 #[ORM\Table(name: 'photos')]
 #[ORM\Index(fields: ['key', 'userId'], name: 'user_photo')]
+#[ORM\UniqueConstraint(name: 'idx_key', fields: ['key'])]
 class Photo
 {
     #[ORM\Id]

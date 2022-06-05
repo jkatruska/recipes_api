@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Exception;
 
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class RequestParseException extends Exception implements DomainExceptionInterface
+class ServerException extends Exception implements DomainExceptionInterface
 {
     use StatusCodeTrait;
 
@@ -16,9 +17,10 @@ class RequestParseException extends Exception implements DomainExceptionInterfac
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct($message = 'Invalid body provided', $code = 0, Throwable $previous = null)
+    public function __construct($message = 'Internal server error', $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
+        $this->statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     /**
