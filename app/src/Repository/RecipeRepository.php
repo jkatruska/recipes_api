@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @extends EntityRepository<Recipe>
  */
-final class RecipeRepository extends EntityRepository
+class RecipeRepository extends EntityRepository
 {
     /**
      * @param UserInterface $user
